@@ -4,7 +4,7 @@ contract VoteContract {
     uint numberOfCandidate;
     uint numberOfVoters;
 
-function VoteContract() public {
+constructor() public {
     owner = msg.sender;
     numberOfCandidate = 0;
     numberOfVoters = 0;
@@ -15,7 +15,7 @@ function getOwner() public view returns(address) {
 }
 
 modifier onlyAdmin() {
-    require(msg.sender = owner);
+    require(owner == msg.sender);
     _;
 }
 
@@ -27,13 +27,16 @@ struct Candidate {
 
 mapping(uint => Candidate) public CandidateDetails;
 
-function addCandidate(string _name, string) public onlyAdmin {
+function addCandidate(string memory _name) public onlyAdmin {
     Candidate memory newCandidate = Candidate({
-        id:numberOfCandidate;
-        name: _name;
-        numOfVote: 0;
+        id:numberOfCandidate,
+        name: _name,
+        numOfVote: 0
     });
-    candidateDetails[numberOfCandidate] = newCandidate;
+    CandidateDetails[numberOfCandidate] = newCandidate;
     numberOfCandidate += 1;
+}
+function getNumberOfCandidate() public view returns (uint){
+    return numberOfCandidate;
 }
 }
