@@ -39,4 +39,7 @@ function addCandidate(string memory _name) public onlyAdmin {
 function getNumberOfCandidate() public view returns (uint){
     return numberOfCandidate;
 }
+function getNumberOfVoters() public view returns (uint) {
+    return numberOfVoters;
+}
 }
