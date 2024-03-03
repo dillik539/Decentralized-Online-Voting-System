@@ -42,4 +42,12 @@ function getNumberOfCandidate() public view returns (uint){
 function getNumberOfVoters() public view returns (uint) {
     return numberOfVoters;
 }
+
+function makeProposal(string memory _name) public onlyAdmin(){
+    //TODO: make proposal for a candidate
+}
+function setProposalDuration(uint duration) public {
+    //TODO: set the proposal duration
+}
+
 }
