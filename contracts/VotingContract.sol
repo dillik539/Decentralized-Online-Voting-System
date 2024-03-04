@@ -1,13 +1,15 @@
-pragma solidity >=0.4.17;
+pragma solidity >=0.4.2;
 contract VotingContract {
     address public owner;
     uint numberOfCandidate;
     uint numberOfVoters;
 
 constructor() public {
-    owner = msg.sender;
-    numberOfCandidate = 0;
-    numberOfVoters = 0;
+    //owner = msg.sender;
+    //numberOfCandidate = 0;
+    //numberOfVoters = 0;
+    addCandidate("John");
+    addCandidate("Micheal");
 }
 
 function getOwner() public view returns(address) {
@@ -18,24 +20,26 @@ modifier onlyAdmin() {
     require(owner == msg.sender);
     _;
 }
-
+//candidate blueprint
 struct Candidate {
     uint id;
     string name;
     uint numOfVote;
 }
+//store instanciated candidate as a key value pair
+mapping(uint => Candidate) public candidateDetails;
 
-mapping(uint => Candidate) public CandidateDetails;
-
-function addCandidate(string memory _name) public onlyAdmin {
-    Candidate memory newCandidate = Candidate({
-        id:numberOfCandidate,
-        name: _name,
-        numOfVote: 0
-    });
-    CandidateDetails[numberOfCandidate] = newCandidate;
-    numberOfCandidate += 1;
+function addCandidate(string memory _name) private {
+    // Candidate memory newCandidate = Candidate({
+    //     id:numberOfCandidate,
+    //     name: _name,
+    //     numOfVote: 0
+    // });
+    //CandidateDetails[numberOfCandidate] = newCandidate;
+    numberOfCandidate ++;
+    candidateDetails[numberOfCandidate] = Candidate(numberOfCandidate, _name, 0);
 }
+
 function getNumberOfCandidate() public view returns (uint){
     return numberOfCandidate;
 }
