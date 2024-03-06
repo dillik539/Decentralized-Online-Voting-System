@@ -8,13 +8,13 @@ contract("VotingContract", function (accounts) {
   //this is accessible for all the tests
   let votingContractInstance;
 
-  it("initailizes with two candidates", function () {
+  it("initailizes with three candidates", function () {
     return VotingContract.deployed()
       .then(function (instance) {
         return instance.getNumberOfCandidate();
       })
       .then(function (count) {
-        assert.equal(count, 2);
+        assert.equal(count, 3);
       });
   });
 

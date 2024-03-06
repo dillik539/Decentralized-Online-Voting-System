@@ -10,6 +10,7 @@ constructor() public {
     //numberOfVoters = 0;
     addCandidate("John");
     addCandidate("Micheal");
+    addCandidate("Mary");
 }
 
 function getOwner() public view returns(address) {
