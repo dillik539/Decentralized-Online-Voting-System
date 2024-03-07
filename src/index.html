@@ -25,13 +25,21 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Votes</th>
+                  <th scope="col">Candidate ID</th>
+                  <th scope="col">Candidate Name</th>
+                  <th scope="col">Votes Received</th>
                 </tr>
               </thead>
               <tbody id="candidatesResults"></tbody>
             </table>
+            <form onSubmit="App.castVote(); return false;">
+              <div class="form-group">
+                <label for="candidate-select">Select Candidate to Vote</label>
+                <select class="form-control" id="candidate-select"></select>
+              </div>
+              <button type="submit" class="btn btn-primary">Vote</button>
+              <hr />
+            </form>
             <hr />
             <p id="accountAddress" class="text-center"></p>
           </div>
