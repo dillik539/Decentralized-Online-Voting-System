@@ -54,4 +54,84 @@ contract("VotingContract", function (accounts) {
         );
       });
   });
+
+  it("It allows a voter to cast a vote", function () {
+    return VotingContract.deployed()
+      .then(function (instance) {
+        votingContractInstance = instance;
+        candidateId = 1;
+        return votingContractInstance.castVote(candidateId, {
+          from: accounts[0],
+        });
+      })
+      .then(function (receipt) {
+        return votingContractInstance.voters(accounts[0]);
+      })
+      .then(function (voted) {
+        assert(voted, "the voter was marked as voted");
+        return votingContractInstance.candidateDetails(candidateId);
+      })
+      .then(function (candidate) {
+        var noOfVote = candidate[2];
+        assert.equal(noOfVote, 1, "increments the candidate's vote count");
+      });
+  });
+
+  it("Throws an exception for invalid candidates", function () {
+    return VotingContract.deployed()
+      .then(function (instance) {
+        votingContractInstance = instance;
+        return votingContractInstance.castVote(20, { from: accounts[1] });
+      })
+      .then(assert.fail)
+      .catch(function (error) {
+        assert(
+          error.message.indexOf("revert") >= 0,
+          "Error message must contain revert"
+        );
+        return votingContractInstance.candidateDetails(1);
+      })
+      .then(function (John) {
+        var numOfVote = John[2];
+        assert.equal(numOfVote, 1, "John did  not receive any votes");
+        return votingContractInstance.candidateDetails(2);
+      })
+      .then(function (Michael) {
+        var numOfVote = Michael[2];
+        assert.equal(numOfVote, 0, "Michael did not receive any votes");
+      });
+  });
+  //TODO: This test fails. Check for error
+  it("Throws an exception for double voting", function () {
+    return VotingContract.deployed()
+      .then(function (instance) {
+        votingContractInstance = instance;
+        id = 2;
+        votingContractInstance.castVote(id, { from: accounts[1] });
+        return votingContractInstance.candidateDetails(id);
+      })
+      .then(function (candidate) {
+        var numOfVote = candidate[2];
+        assert.equal(numOfVote, 1, "Accepts first vote from the voter");
+        //Try voting again the same candidate
+        return votingContractInstance.castVote(id, { from: accounts[1] });
+      })
+      .then(assert.fail)
+      .catch(function (error) {
+        assert(
+          error.message.indexOf("revert") >= 0,
+          "Error message must contain revert"
+        );
+        return votingContractInstance.candidateDetails(1);
+      })
+      .then(function (John) {
+        var numOfVote = John[2];
+        assert.equal(numOfVote, 1, "John did not receive any votes");
+        return votingContractInstance.candidateDetails(2);
+      })
+      .then(function (Michael) {
+        var numOfVote = Michael[2];
+        assert.equal(numOfVote, 1, "Michael did not receive any votes");
+      });
+  });
 });
