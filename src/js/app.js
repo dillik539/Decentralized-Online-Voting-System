@@ -61,11 +61,14 @@ App = {
         var candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
 
+        var candidateSelect = $("#candidatesSelect");
+        candidateSelect.empty();
+
         for (var i = 1; i <= numberOfCandidate; i++) {
           votingInstance.candidateDetails(i).then(function (candidate) {
             var id = candidate[0];
             var name = candidate[1];
-            var voteCount = candidate[2];
+            var numberOfVote = candidate[2];
 
             // Render candidate Result
             var candidateTemplate =
@@ -74,17 +77,42 @@ App = {
               "</th><td>" +
               name +
               "</td><td>" +
-              voteCount +
+              numberOfVote +
               "</td></tr>";
             candidatesResults.append(candidateTemplate);
+
+            //Render candidate option for voting
+            var candidateVoting =
+              "<option value ='" + id + "' >" + name + "</ option>";
+            candidateSelect.append(candidateVoting);
           });
         }
-
+        return votingInstance.voters(App.account);
+      })
+      .then(function (hasVoted) {
+        if (hasVoted) {
+          $("form").hide();
+        }
         loader.hide();
         content.show();
       })
       .catch(function (error) {
         console.warn(error);
+      });
+  },
+  castVote: function () {
+    var candidateId = $("#candidatesSelect").val();
+    App.contracts.VotingContract.deployed()
+      .then(function (instance) {
+        return instance.castVote(candidateId, { from: App.account });
+      })
+      .then(function (result) {
+        // Wait for votes to update
+        $("#content").hide();
+        $("#loader").show();
+      })
+      .catch(function (err) {
+        console.error(err);
       });
   },
 };
