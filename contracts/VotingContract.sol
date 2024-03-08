@@ -30,6 +30,11 @@ struct Candidate {
 //store instanciated candidate as a key value pair
 mapping(uint => Candidate) public candidateDetails;
 
+//vote casted event
+event voteCastedEvent (
+    uint indexed _candidateId
+);
+
 /*store voters information with address as key and boolean value as value.
 value is initially false to indicate that voter has not voted yet. After
 casting vote, the value will be set to true.
@@ -63,6 +68,8 @@ function castVote(uint _candidateId) public {
     candidateDetails[_candidateId].numOfVote++;
     //indicate that the voter has voted.
     voters[msg.sender] = true;
+    //trigger vote casted event
+    emit voteCastedEvent(_candidateId);
 }
 
 function makeProposal(string memory _name) public onlyAdmin(){

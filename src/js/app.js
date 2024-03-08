@@ -30,8 +30,25 @@ App = {
       App.contracts.VotingContract = TruffleContract(votingContract);
       // Connect provider to interact with contract
       App.contracts.VotingContract.setProvider(App.web3Provider);
-
+      App.listenForEvents();
       return App.render();
+    });
+  },
+
+  listenForEvents: function () {
+    App.contracts.VotingContract.deployed().then(function (instance) {
+      instance
+        .voteCastedEvent(
+          {},
+          {
+            fromBlock: 0,
+            toBlock: "latest",
+          }
+        )
+        .watch(function (error, event) {
+          console.log("Event triggered", event);
+          App.render();
+        });
     });
   },
 
