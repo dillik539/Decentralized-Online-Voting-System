@@ -1,5 +1,7 @@
 /** @format */
 
+/** @format */
+
 App = {
   web3Provider: null,
   contracts: {},
@@ -47,7 +49,7 @@ App = {
         )
         .watch(function (error, event) {
           console.log("Event triggered", event);
-          App.render();
+          return App.render();
         });
     });
   },
@@ -56,11 +58,16 @@ App = {
     var votingInstance;
     var loader = $("#loader");
     var content = $("#content");
+    var info = $("#infoMessage");
+    var addressInfo = $("#accountAddress");
+    const message =
+      "Thank you for voting. Your vote has been successfully recorded! Please see the live result above.";
 
     loader.show();
     content.hide();
+    //login();
 
-    // Load account data
+    //Load account data
     web3.eth.getCoinbase(function (err, account) {
       if (err === null) {
         App.account = account;
@@ -109,6 +116,7 @@ App = {
       .then(function (hasVoted) {
         if (hasVoted) {
           $("form").hide();
+          info.html(message);
         }
         loader.hide();
         content.show();
@@ -116,6 +124,7 @@ App = {
       .catch(function (error) {
         console.warn(error);
       });
+    addressInfo.show();
   },
   castVote: function () {
     var candidateId = $("#candidatesSelect").val();
@@ -132,6 +141,11 @@ App = {
         console.error(err);
       });
   },
+  //   login: async function () {
+  //     var web3;
+  //     await window.web3.currentProvider.enable();
+  //     web3 = new Web3(window.web3.currentProvider);
+  //   },
 };
 
 $(function () {

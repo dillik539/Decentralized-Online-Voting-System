@@ -9,7 +9,7 @@ constructor() public {
     //numberOfCandidate = 0;
     //numberOfVoters = 0;
     addCandidate("John");
-    addCandidate("Micheal");
+    addCandidate("Michael");
     addCandidate("Mary");
 }
 
