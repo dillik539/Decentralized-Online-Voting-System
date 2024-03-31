@@ -138,7 +138,7 @@ App = {
         $("#loader").show();
       })
       .catch(function (err) {
-        console.error(err);
+        console.error("error", err);
       });
   },
   //   login: async function () {
