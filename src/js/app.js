@@ -1,7 +1,5 @@
 /** @format */
 
-/** @format */
-
 App = {
   web3Provider: null,
   contracts: {},
@@ -58,20 +56,24 @@ App = {
     var votingInstance;
     var loader = $("#loader");
     var content = $("#content");
+    var addCandidate = $("#addCandidate");
     var info = $("#infoMessage");
     var addressInfo = $("#accountAddress");
+    var candidatesResults = $("#candidatesResults");
+    var candidateSelect = $("#candidatesSelect");
+    var displayForm = $("#displayForm");
     const message =
       "Thank you for voting. Your vote has been successfully recorded! Please see the live result above.";
 
     loader.show();
+    addCandidate.hide();
     content.hide();
-    //login();
 
     //Load account data
     web3.eth.getAccounts(function (err, accounts) {
       if (err === null) {
         App.account = accounts[0];
-        $("#accountAddress").html("Your Account: " + accounts[0]);
+        addressInfo.html("Your Account: " + accounts[0]);
       }
     });
 
@@ -82,10 +84,7 @@ App = {
         return votingInstance.getNumberOfCandidate();
       })
       .then(function (numberOfCandidate) {
-        var candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
-
-        var candidateSelect = $("#candidatesSelect");
         candidateSelect.empty();
 
         for (var i = 1; i <= numberOfCandidate; i++) {
@@ -115,11 +114,12 @@ App = {
       })
       .then(function (hasVoted) {
         if (hasVoted) {
-          $("form").hide();
+          displayForm.hide();
           info.html(message);
         }
         loader.hide();
         content.show();
+        addCandidate.show();
       })
       .catch(function (error) {
         console.warn(error);
@@ -141,11 +141,14 @@ App = {
         console.error("error", err);
       });
   },
-  //   login: async function () {
-  //     var web3;
-  //     await window.web3.currentProvider.enable();
-  //     web3 = new Web3(window.web3.currentProvider);
-  //   },
+
+  //add candidate
+  addCandidate: function () {
+    var addName = $("#name").val();
+    App.contracts.VotingContract.deployed().then(function (instance) {
+      return instance.addCandidate(addName, { from: App.account });
+    });
+  },
 };
 
 $(function () {

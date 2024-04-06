@@ -122,39 +122,4 @@ contract("VotingContract", function (accounts) {
         assert.equal(numOfVote, 0, "Michael did not receive any votes");
       });
   });
-  /*
-  //TODO: This test fails. Check for error
-  it("Throws an exception for double voting", function () {
-    return VotingContract.deployed()
-      .then(function (instance) {
-        votingContractInstance = instance;
-        id = 2;
-        votingContractInstance.castVote(id, { from: accounts[0] });
-        return votingContractInstance.candidateDetails(id);
-      })
-      .then(function (candidate) {
-        var numOfVote = candidate[2];
-        assert.equal(numOfVote, 1, "Accepts first vote from the voter");
-        //Try voting again the same candidate
-        return votingContractInstance.castVote(id, { from: accounts[0] });
-      })
-      .then(assert.fail)
-      .catch(function (error) {
-        assert(
-          error.message.indexOf("revert") >= 0,
-          "Error message must contain revert"
-        );
-        return votingContractInstance.candidateDetails(1);
-      })
-      .then(function (John) {
-        var numOfVote = John[2];
-        assert.equal(numOfVote, 1, "John did not receive any votes");
-        return votingContractInstance.candidateDetails(2);
-      })
-      .then(function (Michael) {
-        var numOfVote = Michael[2];
-        assert.equal(numOfVote, 1, "Michael did not receive any votes");
-      });
-  });
-  */
 });

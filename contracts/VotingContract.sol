@@ -5,19 +5,16 @@ contract VotingContract {
     uint numberOfVoters;
 
 constructor() public {
-    //owner = msg.sender;
-    //numberOfCandidate = 0;
-    //numberOfVoters = 0;
-    addCandidate("John");
-    addCandidate("Michael");
-    addCandidate("Mary");
+    owner = msg.sender;
+    numberOfCandidate = 0;
+    numberOfVoters = 0;
 }
 
 function getOwner() public view returns(address) {
     return owner;
 }
 
-modifier onlyAdmin() {
+modifier onlyAdmin {
     require(owner == msg.sender);
     _;
 }
@@ -41,13 +38,7 @@ casting vote, the value will be set to true.
 */
 mapping(address => bool) public voters;
 
-function addCandidate(string memory _name) private {
-    // Candidate memory newCandidate = Candidate({
-    //     id:numberOfCandidate,
-    //     name: _name,
-    //     numOfVote: 0
-    // });
-    //CandidateDetails[numberOfCandidate] = newCandidate;
+function addCandidate(string memory _name) public {
     numberOfCandidate ++;
     candidateDetails[numberOfCandidate] = Candidate(numberOfCandidate, _name, 0);
 }
@@ -71,12 +62,4 @@ function castVote(uint _candidateId) public {
     //trigger vote casted event
     emit voteCastedEvent(_candidateId);
 }
-
-function makeProposal(string memory _name) public onlyAdmin(){
-    //TODO: make proposal for a candidate
-}
-function setProposalDuration(uint duration) public {
-    //TODO: set the proposal duration
-}
-
 }
