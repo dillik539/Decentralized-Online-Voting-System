@@ -26,11 +26,16 @@
           </div>
           <div id="displayContainer" style="display: flex">
             <div id="addCandidate" style="width: 30%">
-              <h4>Please add the candidate below.</h4>
+              <h4 class="text-left">Add Candidate</h4>
               <br />
               <form id="addCandidateForm" onSubmit="App.addCandidate()">
-                <label for="name">Name:</label>
-                <input type="text" id="name" /><br /><br /><br />
+                <label for="name"></label>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Candidate Name"
+                  style="width: 120px"
+                /><br /><br /><br />
                 <button
                   type="submit"
                   id="addCandidateButton"

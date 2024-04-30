@@ -1,5 +1,5 @@
 /** @format */
-
+//src: https://www.dappuniversity.com/articles/the-ultimate-ethereum-dapp-tutorial
 App = {
   web3Provider: null,
   contracts: {},
@@ -30,7 +30,7 @@ App = {
       App.contracts.VotingContract = TruffleContract(votingContract);
       // Connect provider to interact with contract
       App.contracts.VotingContract.setProvider(App.web3Provider);
-      App.listenForEvents();
+      //App.listenForEvents();
       return App.render();
     });
   },
@@ -63,12 +63,11 @@ App = {
     var candidateSelect = $("#candidatesSelect");
     var displayForm = $("#displayForm");
     const message =
-      "Thank you for voting. Your vote has been successfully recorded! Please see the live result above.";
-
+      "Thank you for voting. Your vote has been successfully" +
+      " recorded! Please see the live result above.";
     loader.show();
     addCandidate.hide();
     content.hide();
-
     //Load account data
     web3.eth.getAccounts(function (err, accounts) {
       if (err === null) {
@@ -76,7 +75,6 @@ App = {
         addressInfo.html("Your Account: " + accounts[0]);
       }
     });
-
     // Load contract data
     App.contracts.VotingContract.deployed()
       .then(function (instance) {
@@ -86,13 +84,11 @@ App = {
       .then(function (numberOfCandidate) {
         candidatesResults.empty();
         candidateSelect.empty();
-
         for (var i = 1; i <= numberOfCandidate; i++) {
           votingInstance.candidateDetails(i).then(function (candidate) {
             var id = candidate[0];
             var name = candidate[1];
             var numberOfVote = candidate[2];
-
             // Render candidate Result
             var candidateTemplate =
               "<tr><th>" +
@@ -145,9 +141,14 @@ App = {
   //add candidate
   addCandidate: function () {
     var addName = $("#name").val();
-    App.contracts.VotingContract.deployed().then(function (instance) {
-      return instance.addCandidate(addName, { from: App.account });
-    });
+    App.contracts.VotingContract.deployed()
+      .then(function (instance) {
+        return instance.addCandidate(addName, { from: App.account });
+      })
+      .catch(function (err) {
+        console.error("error", err);
+        return App.render();
+      });
   },
 };
 
